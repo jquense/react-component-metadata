@@ -6,6 +6,7 @@ let { types: t } = require('babel-core')
   , resolveToModule = require('./util/resolveToModule')
   , isReactImport = require('./util/isReactImport')
   , find = require('lodash/collection/find')
+  , uuid = require('lodash/utility/uniqueId')
   , doc = require('./util/comments')
 
 
@@ -37,7 +38,7 @@ module.exports = function ClassVisitor(state, opts){
       var isKnownComponent = isReactComponentClass(node, scope)
 
       if ( isKnownComponent || opts.inferComponent ){
-        var component = node.id.name
+        var component = node.id ? node.id.name : uuid('AnonymousComponent')
           , classBody = node.body.body
           , comment   = doc.parseCommentBlock(node)
           , propTypes = getClassInitializerPropTypes(classBody, scope)

@@ -6,6 +6,7 @@ let { types: t } = require('babel-core')
   , resolveToModule = require('./util/resolveToModule')
   , isReactImport = require('./util/isReactImport')
   , find = require('lodash/collection/find')
+  , uuid = require('lodash/utility/uniqueId')
   , doc = require('./util/comments')
 
 let isResolvable = resolveToValue.isResolvable
@@ -32,7 +33,7 @@ function getCreatClassName(spec, visitor, scope, comment){
   else if ( t.isProperty(parent) )
     return parent.key.name
 
-  return '<<AnonymousComponent>>'
+  return uuid('AnonymousComponent')
 }
 
 module.exports = function(state, opts){

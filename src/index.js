@@ -1,7 +1,8 @@
 var babel = require('babel-core')
+  , through = require('through2')
 
 
-module.exports = function(file, opts = {}){
+module.exports = function metadata(file, opts = {}){
   var state = {
     file,
     result: {},
@@ -23,7 +24,3 @@ module.exports = function(file, opts = {}){
 
   return state.result
 }
-
-
-
-
