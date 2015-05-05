@@ -1,20 +1,24 @@
 let { types: t } = require('babel-core')
+  , find = require('lodash/collection/find')
 
 let rDoclets = /^@(\w+)(?:$|\s((?:[^](?!^@\w))*))/gmi;
+
+let isBlockComment = node => node.type === 'Block' && (node.value.indexOf('*\n') === 0 || node.value.indexOf('*\r\n') === 0)
 
 var doc = module.exports = {
 
   findLeadingCommentNode(visitor) {
     var parent = visitor.parentPath.node;
     
-    if (parent.leadingComments)
+    if (parent.leadingComments )
       return parent
 
     return visitor.parentPath.parentPath.node
   },
 
   parseCommentBlock(node) {
-    return node && node.leadingComments && doc.cleanComment(node.leadingComments[0].value)
+    var comment = find(node && node.leadingComments, isBlockComment)
+    return comment && doc.cleanComment(comment.value)
   },
 
   cleanComment(comment){

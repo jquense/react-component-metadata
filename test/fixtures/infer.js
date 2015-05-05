@@ -1,36 +1,36 @@
-var defaults = { prop: 'hi!'}
+// var defaults = { prop: 'hi!'}
 
-class StaticComponent extends React.Component {
+// class StaticComponent extends React.Component {
 
-  static propTypes = {
-    prop: React.propTypes.string
-  }
+//   static propTypes = {
+//     prop: React.propTypes.string
+//   }
 
-  render() {
-    return <span/>;
-  }
-}
+//   render() {
+//     return <span/>;
+//   }
+// }
 
-class AssignedComponent extends React.Component {
+// class AssignedComponent extends React.Component {
 
-  static propTypes = {
-    prop: React.propTypes.string
-  }
+//   static propTypes = {
+//     prop: React.propTypes.string
+//   }
 
-  render() {
-    return <span/>;
-  }
-}
+//   render() {
+//     return <span/>;
+//   }
+// }
 
-var ClassicComponent = React.createClass({
+// var ClassicComponent = React.createClass({
 
-  propTypes: {
-    prop: React.propTypes.string
-  },
+//   propTypes: {
+//     prop: React.propTypes.string
+//   },
 
-  getDefaultProps(){},
+//   getDefaultProps(){},
   
-  render() {
-    return <span/>;
-  }
-})
+//   render() {
+//     return <span/>;
+//   }
+// })

@@ -8,4 +8,4 @@ chai.use(require('sinon-chai'))
 
 chai.should();
 
-chai.Assertion.includeStack = true
+// chai.Assertion.includeStack = true

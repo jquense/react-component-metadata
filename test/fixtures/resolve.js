@@ -22,6 +22,7 @@ var spec = {
 
 var defaults = { prop: 'hi!'}
 
+// not a leading comment
 class ES6Component extends React.Component {
 
   static propTypes = propTypes

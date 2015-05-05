@@ -4,7 +4,6 @@ let { types: t } = require('babel-core')
 
 let isResolvable = node => t.isObjectExpression(node) || t.isLiteral(node) || t.isIdentifier(node) 
 
-
 function resolveToValue(node, scope, resolve = isResolvable){
 
   if( t.isAssignmentExpression(node)){

@@ -1,8 +1,4 @@
-//require('babel-core/register')({ stage: 0 })
-
 var babel = require('babel-core')
-
-//var src = fs.readFileSync('./test/fixtures/resolve.js')
 
 
 module.exports = function(file, opts = {}){
