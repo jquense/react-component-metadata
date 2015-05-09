@@ -24,7 +24,7 @@ var doc = module.exports = {
   cleanComment(comment){
     return comment
       .split('\n')
-      .map(str => str.replace(/^\s*\*\s?/, '').trim())
+      .map(str => str.replace(/^\s*\*\s?/, ''))
       .join('\n')
       .trim()
   },

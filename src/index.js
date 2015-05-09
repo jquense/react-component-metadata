@@ -1,8 +1,8 @@
 var babel = require('babel-core')
-  , through = require('through2')
+  , docs = require('./util/comments')
 
 
-module.exports = function metadata(file, opts = {}){
+function metadata(file, opts = {}){
   var state = {
     file,
     result: {},
@@ -24,3 +24,7 @@ module.exports = function metadata(file, opts = {}){
 
   return state.result
 }
+
+metadata.parseDoclets = docs.getDoclets
+
+module.exports = metadata
