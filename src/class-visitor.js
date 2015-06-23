@@ -24,7 +24,7 @@ function getClassInitializerDefaults(classBody, scope){
 function isReactComponentClass(node, scope){
   //console.log(isReactImport(resolveToModule(node.superClass, scope)))
 
-  return node.superClass 
+  return node.superClass
     && node.superClass.property.name === 'Component'
     && isReactImport(resolveToModule(node.superClass, scope))
 }
@@ -49,10 +49,11 @@ module.exports = function ClassVisitor(state, opts){
 
           json[component] = {
             props: {},
+            composes: [],
             desc: comment || ''
           }
 
-          parsePropTypes(propTypes, json[component].props)
+          parsePropTypes(propTypes, json[component], scope)
           parseDefaultProps(defaultProps, json[component].props, state.file)
         }
       }

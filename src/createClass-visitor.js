@@ -11,8 +11,8 @@ let { types: t } = require('babel-core')
 
 let isResolvable = resolveToValue.isResolvable
 
-let isReactClass = (node, scope) => node.property 
-      && node.property.name === 'createClass' 
+let isReactClass = (node, scope) => node.property
+      && node.property.name === 'createClass'
       && isReactImport(resolveToModule(node.object, scope))
 
 function getCreatClassName(spec, visitor, scope, comment){
@@ -23,12 +23,12 @@ function getCreatClassName(spec, visitor, scope, comment){
 
   if ( doclets.alias || doclets.name )
     return doclets.alias || doclets.name
-  
+
   else if ( literal )
     return literal.value
 
   else if ( t.isVariableDeclarator(parent))
-    return parent.id.name 
+    return parent.id.name
 
   else if ( t.isProperty(parent) )
     return parent.key.name
@@ -49,18 +49,19 @@ module.exports = function(state, opts){
           , component = getCreatClassName(spec, this, scope, comment)
           , propTypes = find(spec, node => t.isProperty(node) && node.key.name === 'propTypes')
           , getDefaultProps = find(spec, node => t.isProperty(node) && node.key.name === 'getDefaultProps')
-        
+
         components.push(component)
 
         json[component] = {
           props: {},
+          composes: [],
           desc: comment || ''
         }
 
-        propTypes && parsePropTypes(resolveToValue(propTypes.value, scope), json[component].props)
+        propTypes && parsePropTypes(resolveToValue(propTypes.value, scope), json[component], scope)
 
         if ( getDefaultProps ){
-          let defaultProps = find(getDefaultProps.value.body.body, 
+          let defaultProps = find(getDefaultProps.value.body.body,
             node => t.isReturnStatement(node) && isResolvable(node.argument) )
 
           if ( defaultProps )

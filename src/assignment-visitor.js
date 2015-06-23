@@ -17,7 +17,7 @@ module.exports = function(state, opts){
       var component = node.left.object && node.left.object.name;
 
       if ( isAssigning(node, 'propTypes') && seenClass(component, scope))
-        parsePropTypes(resolveToValue(node.right, scope), json[component].props)
+        parsePropTypes(resolveToValue(node.right, scope), json[component], scope)
 
       else if ( isAssigning(node, 'defaultProps') && seenClass(component, scope) )
         parseDefaultProps(resolveToValue(node.right, scope), json[component].props, state.file)

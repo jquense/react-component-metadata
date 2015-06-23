@@ -1,76 +1,76 @@
 var parseFixture = require('./helpers')
 
-describe.only('parsing Components', () => {
+describe('parsing Components', () => {
 
   var propMetaData = {
-        objProp: { 
-          type: { name: 'object' }, 
-          required: false, 
+        objProp: {
+          type: { name: 'object' },
+          required: false,
           desc: 'An object hash of field errors for the form.'
         },
-        reqProp:{ 
-          type: { name: 'object' }, 
-          required: true, 
+        reqProp:{
+          type: { name: 'object' },
+          required: true,
           desc: ''
         },
-        funcProp: { 
-          type: { name: 'func' }, 
-          required: false, 
+        funcProp: {
+          type: { name: 'func' },
+          required: false,
           desc: 'Callback **that** is called when a validation error occurs.',
           defaultValue: '(path, model) => getter(path)(model)'
         },
-        stringProp: { 
-          type: { name: 'string' }, 
-          required: false, 
+        stringProp: {
+          type: { name: 'string' },
+          required: false,
           desc: '',
           defaultValue: '\'form\''
         },
-        boolProp: { 
-          type: { name: 'bool' }, 
-          required: false, 
+        boolProp: {
+          type: { name: 'bool' },
+          required: false,
           desc: '',
           defaultValue: 'true'
         },
-        enumProp: { 
-          type: { name: 'enum', value: ['true', '\'john\'', '5'] }, 
-          required: false, 
-          desc: ''
-        }, 
-
-        otherProp: { 
-          type: { name: 'Message' }, 
-          required: false, 
+        enumProp: {
+          type: { name: 'enum', value: ['true', '\'john\'', '5'] },
+          required: false,
           desc: ''
         },
 
-        shapeProp: { 
+        otherProp: {
+          type: { name: 'Message' },
+          required: false,
+          desc: ''
+        },
+
+        shapeProp: {
           type: {
-            name: 'object', 
+            name: 'object',
             value: {
               setter: { type: { name: 'func' }, required: false, desc: '' },
               name:   { type: { name: 'string' }, required: false, desc: '' }
-            } 
-          }, 
-          required: false, 
+            }
+          },
+          required: false,
           desc: '',
           defaultValue: '{ setter: ()=>{}, name: \'John\' }'
         },
 
-        unionProp: { 
-          type: { name: 'union', value: [{ name: 'func' }, { name: 'string' }] }, 
-          required: false, 
+        unionProp: {
+          type: { name: 'union', value: [{ name: 'func' }, { name: 'string' }] },
+          required: false,
           desc: ''
         },
 
-        reqUnionProp: { 
-          type: { name: 'union', value: [{ name: 'func' }, { name: 'string' }] }, 
-          required: true, 
+        reqUnionProp: {
+          type: { name: 'union', value: [{ name: 'func' }, { name: 'string' }] },
+          required: true,
           desc: ''
         },
 
-        customProp:  { 
-          type: { name: 'custom' }, 
-          required: false, 
+        customProp:  {
+          type: { name: 'custom' },
+          required: false,
           desc: ''
         }
       }
@@ -79,7 +79,8 @@ describe.only('parsing Components', () => {
     parseFixture('create-class').should.eql({
       ClassicComponent: {
         desc: 'Description of my Component',
-        props: propMetaData
+        props: propMetaData,
+        composes: []
       }
     })
   })
@@ -88,7 +89,8 @@ describe.only('parsing Components', () => {
     parseFixture('class-assigned').should.eql({
       AssignedComponent: {
         desc: 'Description of my Component',
-        props: propMetaData
+        props: propMetaData,
+        composes: []
       }
     })
   })
@@ -97,7 +99,8 @@ describe.only('parsing Components', () => {
     parseFixture('class-static').should.eql({
       StaticComponent: {
         desc: 'Description of my Component',
-        props: propMetaData
+        props: propMetaData,
+        composes: []
       }
     })
   })
@@ -114,11 +117,13 @@ describe.only('parsing Components', () => {
 
     parseFixture('resolve').should.eql({
       ClassicComponent: {
-        desc: '', props
+        desc: '', props,
+        composes: []
       },
 
       ES6Component: {
-        desc: '', props
+        desc: '', props,
+        composes: []
       }
     })
   })
@@ -126,15 +131,47 @@ describe.only('parsing Components', () => {
   it('should resolve to module', () => {
     parseFixture('resolve-module').should.eql({
       ClassicComponent: {
-        desc: '', props: {}
+        desc: '', props: {},
+        composes: []
       },
 
       ES6Component: {
-        desc: '', props: {}
+        desc: '', props: {},
+        composes: []
       },
 
       GlobalComponent: {
-        desc: '', props: {}
+        desc: '', props: {},
+        composes: []
+      }
+    })
+  })
+
+  it('should detect composition', () => {
+    var props = {
+          prop: {
+            desc: '',
+            required: false,
+            type: {
+              name: 'string'
+            }
+          }
+        }
+
+    parseFixture('composes').should.eql({
+      ClassicComponent: {
+        desc: '', props: props,
+        composes: ['Other']
+      },
+
+      ES6Component: {
+        desc: '', props: props,
+        composes: ['Other']
+      },
+
+      ES7Component: {
+        desc: '', props: props,
+        composes: ['Other']
       }
     })
   })

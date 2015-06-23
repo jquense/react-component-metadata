@@ -2,7 +2,7 @@
 let { types: t } = require('babel-core')
   , find = require('lodash/collection/find')
 
-let isResolvable = node => t.isObjectExpression(node) || t.isLiteral(node) || t.isIdentifier(node) 
+let isResolvable = node => t.isObjectExpression(node) || t.isLiteral(node) || t.isIdentifier(node)
 
 function resolveToValue(node, scope, resolve = isResolvable){
 
@@ -10,15 +10,15 @@ function resolveToValue(node, scope, resolve = isResolvable){
     return resolveToValue(node.right, scope, resolve)
   }
   else if ( t.isVariableDeclarator(node) ) {
-    
+
     return resolveToValue(node.init, scope, resolve)
-  }   
+  }
   else if ( t.isIdentifier(node) ){
     var name = node.name
       , binding = scope.getBinding(name)
 
     if ( binding ){
-      node = binding.path.container[0]
+      node = binding.path.container[binding.path.key]
 
       // destructuring
       if ( t.isObjectPattern(node.id) ){
