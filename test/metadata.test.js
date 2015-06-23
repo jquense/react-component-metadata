@@ -1,4 +1,5 @@
 var parseFixture = require('./helpers')
+var { types: t } = require('babel-core')
 
 describe('parsing Components', () => {
 
@@ -105,6 +106,33 @@ describe('parsing Components', () => {
     })
   })
 
+  it('should resolve mixins', () => {
+    parseFixture('mixins', { mixins: true }).should.eql({
+      MyMixin: {
+        desc: 'Description of my Component',
+        props: propMetaData,
+        mixin: true,
+        composes: []
+      }
+    })
+  })
+
+  it('should custom mixin criteria', () => {
+    function isMixin(node) {
+      return t.isVariableDeclarator(node)
+          && node.id.name.toLowerCase().indexOf('mixout') !== -1
+    }
+
+    parseFixture('mixins', { mixins: true, isMixin }).should.eql({
+      MyMixout: {
+        desc: 'Description of my Component',
+        props: propMetaData,
+        mixin: true,
+        composes: []
+      }
+    })
+  })
+
   it('should resolve to binding', () => {
     var props = {
       prop: {
@@ -158,10 +186,11 @@ describe('parsing Components', () => {
           }
         }
 
-    parseFixture('composes').should.eql({
+    parseFixture('composes', { mixins: true }).should.eql({
       ClassicComponent: {
         desc: '', props: props,
-        composes: ['Other']
+        composes: ['Other'],
+        mixins: ['MyMixin']
       },
 
       ES6Component: {

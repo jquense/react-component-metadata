@@ -14,7 +14,7 @@ npm i -S react-component-metadata
 var metadata = require('react-component-metadata')
 var fs = require('fs')
 
-var result = metadata(fs.readFileSync('./Modal.jsx'))
+var result = metadata(fs.readFileSync('./Modal.jsx'), options)
 ```
 
 `result` will be an object hash with component names as keys
@@ -36,4 +36,8 @@ var result = metadata(fs.readFileSync('./Modal.jsx'))
 ```
 
 You can also use `metadata.parseDoclets` to parse the JSDoc values out of the comments.
+
+#### Options
+
+- `mixins`: default false, Parse Mixins as components, will have an additional `mixin: true` property on the component metadata. Setting this to `true` will also try and parse mixins in createClass components and add them to the `mixins` property.
 

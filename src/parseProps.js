@@ -17,8 +17,8 @@ function parsePropTypes(node, rslt = { props: {}, composes: [] }, scope) {
       var module = scope && resolveToModule(pt.argument, scope)
         , name = !module ? null : path.basename(module.source.value, path.extname(module.source.value))
 
-      //console.log(module )
-      name && rslt.composes.push(name)
+      if ( name && rslt.composes.indexOf(name) === -1 )
+        rslt.composes.push(name)
     }
     else {
       props[pt.key.name] = props[pt.key.name] || {}
@@ -46,6 +46,7 @@ function getTypeFromPropType(pt){
 
   else if ( t.isCallExpression(pt) ){
     var name = pt.callee.property.name
+      , isArray = t.isArrayExpression(pt.arguments[0])
 
     if ( name === 'shape')
       return { name: 'object', value: parsePropTypes(pt.arguments[0]).props }
@@ -56,8 +57,21 @@ function getTypeFromPropType(pt){
     else if ( name === 'oneOfType')
       return { name: 'union', value: pt.arguments[0].elements.map(getTypeFromPropType) }
 
-    else if ( name === 'oneOf')
-      return { name: 'enum', value: pt.arguments[0].elements.map( el => el.raw)}
+    else if ( name === 'oneOf'){
+      var type = { name: 'enum' }
+        , argument = pt.arguments[0];
+
+      if ( t.isArrayExpression(argument) )
+        type.value = argument.elements.map( el => el.raw)
+
+      else if ( t.isMemberExpression(argument) )
+        type.value = argument.property.value
+
+      else if ( t.isIdentifier(argument) )
+        type.value = argument.value
+
+      return type
+    }
 
     else if ( name === 'arrayOf')
       return { name: 'array', value: getTypeFromPropType(pt.arguments[0]) }
@@ -65,7 +79,6 @@ function getTypeFromPropType(pt){
   else if ( t.isFunction(pt) )
     return { name: 'custom' }
 }
-
 
 module.exports = {
 

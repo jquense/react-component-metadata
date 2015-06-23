@@ -4,50 +4,31 @@ let { types: t } = require('babel-core')
   , parseDefaultProps } = require('./parseProps')
   , resolveToValue = require('./util/resolveToValue')
   , resolveToModule = require('./util/resolveToModule')
-  , isReactImport = require('./util/isReactImport')
   , find = require('lodash/collection/find')
-  , uuid = require('lodash/utility/uniqueId')
   , doc = require('./util/comments')
   , path = require('path');
 
 let isResolvable = resolveToValue.isResolvable
 
-let isReactClass = (node, scope) => node.property
-      && node.property.name === 'createClass'
-      && isReactImport(resolveToModule(node.object, scope))
-
-function getCreatClassName(spec, visitor, scope, comment){
-  var parent = visitor.parentPath.node
-    , displayName = find(spec || [], node => t.isProperty(node) && node.key.name === 'displayName')
-    , literal = displayName && resolveToValue(displayName.value, scope)
-    , doclets = doc.getDoclets(comment);
-
-  if ( doclets.alias || doclets.name )
-    return doclets.alias || doclets.name
-
-  else if ( literal )
-    return literal.value
-
-  else if ( t.isVariableDeclarator(parent))
-    return parent.id.name
-
-  else if ( t.isProperty(parent) )
-    return parent.key.name
-
-  return uuid('AnonymousComponent')
+function isMixin(node) {
+  return t.isVariableDeclarator(node)
+      && node.id.name.toLowerCase().indexOf('mixin') !== -1
 }
 
 module.exports = function(state, opts){
   var json = state.result
     , components = state.seen
 
+  var testMixin = opts.isMixin || isMixin;
+
   return {
     enter(node, parent, scope) {
 
-      if ( isReactClass(node.callee, scope) || opts.inferComponent ) {
-        var spec = resolveToValue(node.arguments[0], scope).properties
+      if ( testMixin(node) ) {
+        var spec = resolveToValue(node.init, scope).properties
           , comment = doc.parseCommentBlock(doc.findLeadingCommentNode(this))
-          , component = getCreatClassName(spec, this, scope, comment)
+          , component = node.id.name
+          , mixins = find(spec, node => t.isProperty(node) && node.key.name === 'mixins')
           , propTypes = find(spec, node => t.isProperty(node) && node.key.name === 'propTypes')
           , getDefaultProps = find(spec, node => t.isProperty(node) && node.key.name === 'getDefaultProps')
 
@@ -56,16 +37,13 @@ module.exports = function(state, opts){
         json[component] = {
           props: {},
           composes: [],
+          mixin: true,
           desc: comment || ''
         }
 
-        if ( opts.mixins ){
-          var mixins = find(spec, node => t.isProperty(node) && node.key.name === 'mixins');
-
-          if ( mixins ){
-            json[component].mixins = []
-            parseMixins(mixins.value.elements, scope, json[component].mixins)
-          }
+        if ( mixins && t.isArrayExpression(mixins.value) ){
+          json[component].mixins = []
+          parseMixins(mixins.value.elements, scope, json[component].mixins)
         }
 
         propTypes && parsePropTypes(resolveToValue(propTypes.value, scope), json[component], scope)

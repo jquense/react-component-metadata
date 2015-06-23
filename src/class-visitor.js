@@ -22,9 +22,10 @@ function getClassInitializerDefaults(classBody, scope){
 
 
 function isReactComponentClass(node, scope){
-  //console.log(isReactImport(resolveToModule(node.superClass, scope)))
+
 
   return node.superClass
+    && t.isMemberExpression(node.superClass)
     && node.superClass.property.name === 'Component'
     && isReactImport(resolveToModule(node.superClass, scope))
 }

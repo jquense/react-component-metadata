@@ -11,7 +11,9 @@ function resolveToModule(node, scope){
 
   node = resolveToValue(node, scope, resolve)
 
+
   if ( isModule(node) ){
+    //console.log(node)
     return node
   }
   else if( t.isIdentifier(node)) {

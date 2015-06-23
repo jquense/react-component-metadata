@@ -10,14 +10,20 @@ function metadata(file, opts = {}){
   }
 
   function plugin(host) {
-    return new host.Transformer('process-react-classes', {
+    var visitors = {
 
       AssignmentExpression: require('./assignment-visitor')(state, opts),
 
       Class: require('./class-visitor')(state, opts),
 
       CallExpression: require('./createClass-visitor')(state, opts)
-    })
+    }
+
+    if ( opts.mixins ){
+      visitors.VariableDeclarator = require('./mixin-visitor')(state, opts)
+    }
+
+    return new host.Transformer('process-react-classes', visitors)
   }
 
   babel.transform(file, { code: false, stage: 0, plugins: [ plugin ] })

@@ -1,5 +1,6 @@
 import React from 'react';
 import Other from './Other';
+import MyMixin from './MyMixin'
 
 
 class ES6Component extends React.Component {
@@ -30,6 +31,9 @@ var ClassicComponent = React.createClass({
     ...Other.propTypes,
     prop: React.PropTypes.string
   },
+
+  mixins: [ MyMixin ],
+
   render() {
     return <span/>;
   }
