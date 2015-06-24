@@ -75,6 +75,9 @@ function getTypeFromPropType(pt){
 
     else if ( name === 'arrayOf')
       return { name: 'array', value: getTypeFromPropType(pt.arguments[0]) }
+
+    else
+      return { name }
   }
   else if ( t.isFunction(pt) )
     return { name: 'custom' }

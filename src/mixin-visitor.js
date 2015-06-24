@@ -12,17 +12,18 @@ let isResolvable = resolveToValue.isResolvable
 
 function isMixin(node) {
   return t.isVariableDeclarator(node)
+      && t.isIdentifier(node.id)
       && node.id.name.toLowerCase().indexOf('mixin') !== -1
 }
 
 module.exports = function(state, opts){
-  var json = state.result
-    , components = state.seen
+  var json = state.result;
 
   var testMixin = opts.isMixin || isMixin;
 
   return {
     enter(node, parent, scope) {
+      //if ( !node.id.name ) console.log(node)
 
       if ( testMixin(node) ) {
         var spec = resolveToValue(node.init, scope).properties
@@ -31,8 +32,6 @@ module.exports = function(state, opts){
           , mixins = find(spec, node => t.isProperty(node) && node.key.name === 'mixins')
           , propTypes = find(spec, node => t.isProperty(node) && node.key.name === 'propTypes')
           , getDefaultProps = find(spec, node => t.isProperty(node) && node.key.name === 'getDefaultProps')
-
-        components.push(component)
 
         json[component] = {
           props: {},

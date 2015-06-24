@@ -71,6 +71,7 @@ module.exports = function(state, opts){
         propTypes && parsePropTypes(resolveToValue(propTypes.value, scope), json[component], scope)
 
         if ( getDefaultProps ){
+          //console.log('defaults!')
           let defaultProps = find(getDefaultProps.value.body.body,
             node => t.isReturnStatement(node) && isResolvable(node.argument) )
 
