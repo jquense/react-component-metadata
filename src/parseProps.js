@@ -45,8 +45,7 @@ function getTypeFromPropType(pt){
   }
 
   else if ( t.isCallExpression(pt) ){
-    var name = pt.callee.property.name
-      , isArray = t.isArrayExpression(pt.arguments[0])
+    var name = pt.callee.property.name;
 
     if ( name === 'shape')
       return { name: 'object', value: parsePropTypes(pt.arguments[0]).props }
