@@ -19,8 +19,9 @@ module.exports = function(state, opts){
       if ( isAssigning(node, 'propTypes') && seenClass(component, scope))
         parsePropTypes(resolveToValue(node.right, scope), json[component], scope)
 
-      else if ( isAssigning(node, 'defaultProps') && seenClass(component, scope) )
+      else if ( isAssigning(node, 'defaultProps') && seenClass(component, scope) ){
         parseDefaultProps(resolveToValue(node.right, scope), json[component].props, state.file)
+      }
     }
   }
 }

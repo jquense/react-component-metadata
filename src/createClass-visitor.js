@@ -3,18 +3,14 @@ let { types: t } = require('babel-core')
     parsePropTypes
   , parseDefaultProps } = require('./parseProps')
   , resolveToValue = require('./util/resolveToValue')
-  , resolveToModule = require('./util/resolveToModule')
-  , isReactImport = require('./util/isReactImport')
+  , resolveToName = require('./util/resolveToName')
+  , isReactClass = require('./util/isReactCreateClass')
   , find = require('lodash/collection/find')
   , uuid = require('lodash/utility/uniqueId')
   , doc = require('./util/comments')
   , path = require('path');
 
 let isResolvable = resolveToValue.isResolvable
-
-let isReactClass = (node, scope) => node.property
-      && node.property.name === 'createClass'
-      && isReactImport(resolveToModule(node.object, scope))
 
 function getCreatClassName(spec, visitor, scope, comment){
   var parent = visitor.parentPath.node
@@ -71,9 +67,9 @@ module.exports = function(state, opts){
         propTypes && parsePropTypes(resolveToValue(propTypes.value, scope), json[component], scope)
 
         if ( getDefaultProps ){
-          //console.log('defaults!')
+
           let defaultProps = find(getDefaultProps.value.body.body,
-            node => t.isReturnStatement(node) && isResolvable(node.argument) )
+            node => t.isReturnStatement(node) && (isResolvable(node.argument) || t.isIdentifier(node.argument)) )
 
           if ( defaultProps )
             parseDefaultProps(resolveToValue(defaultProps.argument, scope), json[component].props, state.file)
@@ -85,8 +81,7 @@ module.exports = function(state, opts){
 
 function parseMixins(mixins = [], scope, composes){
   mixins.forEach( mixin => {
-    var module = resolveToModule(mixin, scope)
-      , name = !module ? null : path.basename(module.source.value, path.extname(module.source.value))
+    var name = resolveToName(mixin, scope)
 
     if ( name && composes.indexOf(name) === -1)
       composes.push(name)

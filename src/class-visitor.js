@@ -3,8 +3,7 @@ let { types: t } = require('babel-core')
     parsePropTypes
   , parseDefaultProps } = require('./parseProps')
   , resolveToValue = require('./util/resolveToValue')
-  , resolveToModule = require('./util/resolveToModule')
-  , isReactImport = require('./util/isReactImport')
+  , isReactComponentClass = require('./util/isReactComponentClass')
   , find = require('lodash/collection/find')
   , uuid = require('lodash/utility/uniqueId')
   , doc = require('./util/comments')
@@ -20,15 +19,6 @@ function getClassInitializerDefaults(classBody, scope){
   return type && resolveToValue(type.value, scope)
 }
 
-
-function isReactComponentClass(node, scope){
-
-
-  return node.superClass
-    && t.isMemberExpression(node.superClass)
-    && node.superClass.property.name === 'Component'
-    && isReactImport(resolveToModule(node.superClass, scope))
-}
 
 module.exports = function ClassVisitor(state, opts){
   var json = state.result

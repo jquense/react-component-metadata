@@ -1,5 +1,7 @@
 var { React } = window
 
+var defaults = { prop: 'hi!'}
+
 var propTypes = {
   /**
    * prop description
@@ -14,13 +16,13 @@ var spec = {
   getDefaultProps(){
     return defaults
   },
-  
+
   render() {
     return <span/>;
   }
 }
 
-var defaults = { prop: 'hi!'}
+
 
 // not a leading comment
 class ES6Component extends React.Component {

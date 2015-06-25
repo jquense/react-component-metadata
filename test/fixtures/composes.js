@@ -18,6 +18,7 @@ ES6Component.propTypes = {
 class ES7Component extends React.Component {
   static propTypes = {
     ...Other.propTypes,
+    ...ES6Component.propTypes,
     prop: React.PropTypes.string
   }
 

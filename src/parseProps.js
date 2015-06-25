@@ -1,7 +1,6 @@
 let { types: t } = require('babel-core')
-  , resolveToModule = require('./util/resolveToModule')
-  , doc = require('./util/comments')
-  , path = require('path')
+  , resolveToName = require('./util/resolveToName')
+  , doc = require('./util/comments');
 
 let isRequired = pt => t.isMemberExpression(pt) && pt.property.name === 'isRequired'
 
@@ -14,8 +13,7 @@ function parsePropTypes(node, rslt = { props: {}, composes: [] }, scope) {
 
   node && node.properties && node.properties.forEach(pt => {
     if ( t.isSpreadProperty(pt) ) {
-      var module = scope && resolveToModule(pt.argument, scope)
-        , name = !module ? null : path.basename(module.source.value, path.extname(module.source.value))
+      var name = scope && resolveToName(pt.argument, scope);
 
       if ( name && rslt.composes.indexOf(name) === -1 )
         rslt.composes.push(name)
@@ -45,7 +43,13 @@ function getTypeFromPropType(pt){
   }
 
   else if ( t.isCallExpression(pt) ){
-    var name = pt.callee.property.name;
+    var name = '';
+
+    if ( t.isMemberExpression(pt.callee) )
+      name = pt.callee.property.name;
+
+    else if ( t.isIdentifier(pt.callee) )
+      name = pt.callee.name
 
     if ( name === 'shape')
       return { name: 'object', value: parsePropTypes(pt.arguments[0]).props }

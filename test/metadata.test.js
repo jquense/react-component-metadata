@@ -175,6 +175,26 @@ describe('parsing Components', () => {
     })
   })
 
+  it('should resolve to either', () => {
+    parseFixture('resolve-mod-or-component').should.eql({
+      ClassicComponent: {
+        desc: '', props: {},
+        composes: []
+      },
+
+      ES6Component: {
+        desc: '', props: {},
+        composes: []
+      },
+
+      GlobalComponent: {
+        desc: '', props: {},
+        composes: ['ES6Component', 'ClassicComponent']
+      }
+    })
+  })
+
+
   it('should detect composition', () => {
     var props = {
           prop: {
@@ -200,7 +220,7 @@ describe('parsing Components', () => {
 
       ES7Component: {
         desc: '', props: props,
-        composes: ['Other']
+        composes: ['Other', 'ES6Component']
       }
     })
   })
