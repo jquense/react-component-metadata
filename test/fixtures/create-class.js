@@ -54,7 +54,11 @@ var ClassicComponent = React.createClass({
 
     customProp(props, name, componentName) {
       return React.PropTypes.any.isRequired(props, name, componentName)
-    }
+    },
+
+    customIdentifier: someValidator,
+
+    customCallExpression: someValidator()
   },
 
   render() {

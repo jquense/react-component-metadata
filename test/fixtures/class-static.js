@@ -11,7 +11,7 @@ class StaticComponent extends React.Component {
     boolProp: true,
     funcProp: (path, model) => getter(path)(model),
     shapeProp: { setter: ()=>{}, name: 'John' },
-  } 
+  }
 
   static propTypes = {
 
@@ -52,7 +52,11 @@ class StaticComponent extends React.Component {
 
     customProp(props, name, componentName) {
       return React.PropTypes.any.isRequired(props, name, componentName)
-    }
+    },
+
+    customIdentifier: someValidator,
+
+    customCallExpression: someValidator()
   }
 
   render() {

@@ -34,14 +34,12 @@ function parsePropTypes(node, rslt = { props: {}, composes: [] }, scope) {
 }
 
 function getTypeFromPropType(pt){
-
   if ( t.isMemberExpression(pt) ){
     if ( pt.property.name === 'isRequired')
       return getTypeFromPropType(pt.object)
 
     return { name: pt.property.name }
   }
-
   else if ( t.isCallExpression(pt) ){
     var name = '';
 
@@ -82,6 +80,9 @@ function getTypeFromPropType(pt){
     else
       return { name }
   }
+  else if ( t.isIdentifier(pt) )
+    return { name: pt.name }
+
   else if ( t.isFunction(pt) )
     return { name: 'custom' }
 }

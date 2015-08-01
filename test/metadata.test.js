@@ -73,6 +73,18 @@ describe('parsing Components', () => {
           type: { name: 'custom' },
           required: false,
           desc: ''
+        },
+
+        customIdentifier:  {
+          type: { name: 'someValidator' },
+          required: false,
+          desc: ''
+        },
+
+        customCallExpression:  {
+          type: { name: 'someValidator' },
+          required: false,
+          desc: ''
         }
       }
 
