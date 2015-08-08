@@ -26,27 +26,25 @@ module.exports = function ClassVisitor(state, opts){
 
   return {
     enter(node, parent, scope) {
-      var isKnownComponent = isReactComponentClass(node, scope)
+      var isKnownComponent = isReactComponentClass(node, scope, opts.inferComponent)
 
-      if ( isKnownComponent || opts.inferComponent ){
+      if (isKnownComponent){
         var component = node.id ? node.id.name : uuid('AnonymousComponent')
           , classBody = node.body.body
           , comment   = doc.parseCommentBlock(node)
           , propTypes = getClassInitializerPropTypes(classBody, scope)
           , defaultProps = getClassInitializerDefaults(classBody, scope);
 
-        if ( isKnownComponent || propTypes || defaultProps ){
-          components.push(component)
+        components.push(component)
 
-          json[component] = {
-            props: {},
-            composes: [],
-            desc: comment || ''
-          }
-
-          parsePropTypes(propTypes, json[component], scope)
-          parseDefaultProps(defaultProps, json[component].props, state.file)
+        json[component] = {
+          props: {},
+          composes: [],
+          desc: comment || ''
         }
+
+        parsePropTypes(propTypes, json[component], scope)
+        parseDefaultProps(defaultProps, json[component].props, state.file)
       }
 
       return node

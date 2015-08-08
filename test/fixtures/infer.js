@@ -1,36 +1,16 @@
-// var defaults = { prop: 'hi!'}
+import React from 'react';
 
-// class StaticComponent extends React.Component {
+class InferedComponent {
+  static propTypes = {
+    /**
+     * An object hash of field errors for the form.
+     */
+    objProp: React.PropTypes.object
+  }
 
-//   static propTypes = {
-//     prop: React.propTypes.string
-//   }
+  render(){
 
-//   render() {
-//     return <span/>;
-//   }
-// }
+  }
+}
 
-// class AssignedComponent extends React.Component {
-
-//   static propTypes = {
-//     prop: React.propTypes.string
-//   }
-
-//   render() {
-//     return <span/>;
-//   }
-// }
-
-// var ClassicComponent = React.createClass({
-
-//   propTypes: {
-//     prop: React.propTypes.string
-//   },
-
-//   getDefaultProps(){},
-  
-//   render() {
-//     return <span/>;
-//   }
-// })
+export default InferedComponent;

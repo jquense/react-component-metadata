@@ -40,7 +40,7 @@ module.exports = function(state, opts){
   return {
     enter(node, parent, scope) {
 
-      if ( isReactClass(node.callee, scope) || opts.inferComponent ) {
+      if (isReactClass(node.callee, scope)) {
         var spec = resolveToValue(node.arguments[0], scope).properties
           , comment = doc.parseCommentBlock(doc.findLeadingCommentNode(this))
           , component = getCreatClassName(spec, this, scope, comment)

@@ -118,6 +118,18 @@ describe('parsing Components', () => {
     })
   })
 
+  it('should resolve classes with render methods', () => {
+    parseFixture('infer', { inferComponent: true }).should.eql({
+      InferedComponent: {
+        desc: '',
+        composes: [],
+        props: {
+          objProp: propMetaData.objProp
+        }
+      }
+    })
+  })
+
   it('should resolve mixins', () => {
     parseFixture('mixins', { mixins: true }).should.eql({
       MyMixin: {
