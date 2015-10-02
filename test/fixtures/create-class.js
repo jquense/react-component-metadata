@@ -8,6 +8,7 @@ var ClassicComponent = React.createClass({
 
   getDefaultProps(){
     return {
+      'aria-property': 'aria-value',
       stringProp: 'form',
       boolProp: true,
       funcProp: (path, model) => getter(path)(model),
@@ -16,7 +17,6 @@ var ClassicComponent = React.createClass({
   },
 
   propTypes:  {
-
     /**
      * An object hash of field errors for the form.
      */
@@ -32,6 +32,8 @@ var ClassicComponent = React.createClass({
     stringProp: React.PropTypes.string,
 
     boolProp:   React.PropTypes.bool,
+
+    'aria-property': React.PropTypes.string,
 
     enumProp:   React.PropTypes.oneOf([true, 'john', 5]),
 
