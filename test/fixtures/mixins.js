@@ -2,6 +2,7 @@
 var React  = require('react');
 
 var defaults = {
+      'aria-property': 'aria-value',
       stringProp: 'form',
       boolProp: true,
       funcProp: (path, model) => getter(path)(model),
@@ -25,6 +26,8 @@ var props = {
     stringProp: React.PropTypes.string,
 
     boolProp:   React.PropTypes.bool,
+
+    'aria-property': React.PropTypes.string,
 
     enumProp:   React.PropTypes.oneOf([true, 'john', 5]),
 

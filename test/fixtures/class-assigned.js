@@ -11,6 +11,7 @@ class AssignedComponent extends React.Component {
 }
 
 AssignedComponent.defaultProps = {
+  'aria-property': 'aria-value',
   stringProp: 'form',
   boolProp: true,
   funcProp: (path, model) => getter(path)(model),
@@ -34,6 +35,8 @@ AssignedComponent.propTypes = {
     stringProp: React.PropTypes.string,
 
     boolProp:   React.PropTypes.bool,
+
+    'aria-property': React.PropTypes.string,
 
     enumProp:   React.PropTypes.oneOf([true, 'john', 5]),
 
