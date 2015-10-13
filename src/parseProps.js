@@ -6,6 +6,11 @@ let isRequired = pt => t.isMemberExpression(pt) && pt.property.name === 'isRequi
 
 let raw = (node, src) => node ? src.slice(node.start, node.end).toString() : undefined
 
+function getKeyName(pt) {
+  if (pt.key.type === 'Literal') return pt.key.value; // 'aria-property'
+  else return pt.key.name;
+}
+
 function parsePropTypes(node, rslt = { props: {}, composes: [] }, scope) {
   var props = rslt.props;
 
@@ -19,10 +24,11 @@ function parsePropTypes(node, rslt = { props: {}, composes: [] }, scope) {
         rslt.composes.push(name)
     }
     else {
-      props[pt.key.name] = props[pt.key.name] || {}
+      const keyName = getKeyName(pt);
+      props[keyName] = props[keyName] || {}
 
-      props[pt.key.name] = {
-        ...props[pt.key.name],
+      props[keyName] = {
+        ...props[keyName],
         type: getTypeFromPropType(pt.value),
         required: isRequired(pt.value),
         desc: doc.parseCommentBlock(pt) || ''
@@ -107,9 +113,10 @@ module.exports = {
             rslt.composes.push(name)
         }
         else if (pt.key) {
-          rslt.props[pt.key.name] = rslt.props[pt.key.name] || {}
-          rslt.props[pt.key.name].defaultValue = raw(pt.value, src)
-          rslt.props[pt.key.name].computed = !t.isLiteral(pt.value)
+          const keyName = getKeyName(pt);
+          rslt.props[keyName] = rslt.props[keyName] || {}
+          rslt.props[keyName].defaultValue = raw(pt.value, src)
+          rslt.props[keyName].computed = !t.isLiteral(pt.value)
         }
       })
       return rslt

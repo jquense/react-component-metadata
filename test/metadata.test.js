@@ -4,6 +4,12 @@ var { types: t } = require('babel-core')
 describe('parsing Components', () => {
 
   var propMetaData = {
+        'aria-property': {
+          type: { name: 'string' },
+          required: false,
+          desc: '',
+          defaultValue: '\'aria-value\''
+        },
         objProp: {
           type: { name: 'object' },
           required: false,
@@ -283,4 +289,3 @@ describe('parsing Components', () => {
   })
 
 })
-
