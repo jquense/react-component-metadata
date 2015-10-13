@@ -8,6 +8,7 @@ describe('parsing Components', () => {
           type: { name: 'string' },
           required: false,
           desc: '',
+          computed: false,
           defaultValue: '\'aria-value\''
         },
         objProp: {

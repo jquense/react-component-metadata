@@ -18,7 +18,8 @@
   "scripts": {
     "test": "mocha ./test/*.test.js -R spec --require ./test/register-babel",
     "tdd": "mocha ./test/*.test.js -R spec --watch --require ./test/register-babel",
-    "build": "rimraf lib/* && babel src --out-dir lib"
+    "build": "rimraf lib/* && babel src --out-dir lib",
+    "release": "release"
   },
   "devDependencies": {
     "babel": "^5.0.0",
@@ -26,6 +27,7 @@
     "chai-as-promised": "^4.1.1",
     "mocha": "~1.21.4",
     "react": "^0.12.2",
+    "release-script": "^0.5.3",
     "rimraf": "^2.2.8",
     "sinon-chai": "^2.6.0"
   },
@@ -34,5 +36,8 @@
     "commander": "^2.8.1",
     "glob": "^5.0.5",
     "lodash": "^3.8.0"
+  },
+  "release-script": {
+    "defaultDryRun": "false"
   }
 }
