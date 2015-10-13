@@ -1,4 +1,11 @@
 {
   "stage": 0,
-  "loose": "all"
+  "loose": "all",
+  "plugins": ["external-helpers"],
+  "extra": {
+    "externalHelperPlugin": {
+      "path": "util/babelHelpers.js",
+      "base": "src"
+    }
+  }
 }

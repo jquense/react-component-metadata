@@ -18,18 +18,21 @@ describe('parsing Components', () => {
           type: { name: 'func' },
           required: false,
           desc: 'Callback **that** is called when a validation error occurs.',
+          computed: true,
           defaultValue: '(path, model) => getter(path)(model)'
         },
         stringProp: {
           type: { name: 'string' },
           required: false,
           desc: '',
+          computed: false,
           defaultValue: '\'form\''
         },
         boolProp: {
           type: { name: 'bool' },
           required: false,
           desc: '',
+          computed: false,
           defaultValue: 'true'
         },
         enumProp: {
@@ -54,6 +57,7 @@ describe('parsing Components', () => {
           },
           required: false,
           desc: '',
+          computed: true,
           defaultValue: '{ setter: ()=>{}, name: \'John\' }'
         },
 
@@ -163,6 +167,7 @@ describe('parsing Components', () => {
         type: { name: 'string' },
         required: false,
         desc: 'prop description',
+        computed: false,
         defaultValue: '\'hi!\''
       }
     }
@@ -218,7 +223,6 @@ describe('parsing Components', () => {
     })
   })
 
-
   it('should detect composition', () => {
     var props = {
           prop: {
@@ -245,6 +249,35 @@ describe('parsing Components', () => {
       ES7Component: {
         desc: '', props: props,
         composes: ['Other', 'ES6Component']
+      }
+    })
+  })
+
+  it('should handle defaultProp spread', () => {
+    var props = {
+          prop: {
+            desc: '',
+            required: false,
+            type: {
+              name: 'string'
+            }
+          }
+        }
+
+    parseFixture('defaultPropSpread', { mixins: true }).should.eql({
+      Component: {
+        desc: '',
+        composes: ['Component'],
+        props: {
+          prop: {
+            computed: false,
+            defaultValue: "'boom'",
+          },
+          anotherProp: {
+            computed: true,
+            defaultValue: '()=>{}',
+          },
+        }
       }
     })
   })

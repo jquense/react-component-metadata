@@ -52,7 +52,7 @@ module.exports = function(state, opts){
             node => t.isReturnStatement(node) && (isResolvable(node.argument) || t.isIdentifier(node.argument)) )
 
           if ( defaultProps )
-            parseDefaultProps(resolveToValue(defaultProps.argument, scope), json[component].props, state.file)
+            parseDefaultProps(resolveToValue(defaultProps.argument, scope), json[component], state.file)
         }
       }
     }

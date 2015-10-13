@@ -4,7 +4,7 @@ let { types: t } = require('babel-core')
 
 let isRequired = pt => t.isMemberExpression(pt) && pt.property.name === 'isRequired'
 
-let raw = (node, src) => src.slice(node.start, node.end).toString()
+let raw = (node, src) => node ? src.slice(node.start, node.end).toString() : undefined
 
 function parsePropTypes(node, rslt = { props: {}, composes: [] }, scope) {
   var props = rslt.props;
@@ -91,11 +91,26 @@ module.exports = {
 
   parsePropTypes,
 
-  parseDefaultProps(node, rslt = {}, src) {
+  parseDefaultProps(node, rslt = {}, src, scope) {
+    if (!rslt.props)
+      rslt.props = {};
+
     node && node.properties && node.properties
-      .forEach( pt => {
-        rslt[pt.key.name] = rslt[pt.key.name] || {}
-        rslt[pt.key.name].defaultValue = raw(pt.value, src)
+      .forEach(pt => {
+        if (t.isSpreadProperty(pt)) {
+          var name = scope && resolveToName(pt.argument, scope);
+
+          if (!rslt.composes)
+            rslt.composes = [];
+
+          if (name && rslt.composes.indexOf(name) === -1)
+            rslt.composes.push(name)
+        }
+        else if (pt.key) {
+          rslt.props[pt.key.name] = rslt.props[pt.key.name] || {}
+          rslt.props[pt.key.name].defaultValue = raw(pt.value, src)
+          rslt.props[pt.key.name].computed = !t.isLiteral(pt.value)
+        }
       })
       return rslt
   }
