@@ -33,9 +33,10 @@
     "sinon": "^1.17.2",
     "sinon-chai": "^2.6.0"
   },
+  "peerDependencies": {
+    "babel-core": "^5.8.34"
+  },
   "dependencies": {
-    "babel-core": "^5.8.34",
-    "commander": "^2.8.1",
     "glob": "^5.0.5",
     "lodash": "^3.8.0"
   },
