@@ -25,14 +25,17 @@
     "babel": "^5.0.0",
     "chai": "^1.10.0",
     "chai-as-promised": "^4.1.1",
+    "eslint": "^0.24.1",
     "mocha": "~1.21.4",
     "react": "^0.12.2",
     "release-script": "^0.5.3",
     "rimraf": "^2.2.8",
+    "sinon": "^1.17.2",
     "sinon-chai": "^2.6.0"
   },
   "dependencies": {
-    "babel-core": "5.2.6",
+    "babel-core": "^5.8.34",
+    "babel-types": "^6.2.0",
     "commander": "^2.8.1",
     "glob": "^5.0.5",
     "lodash": "^3.8.0"
