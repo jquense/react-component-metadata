@@ -18,20 +18,22 @@ function resolveToName(node, scope){
 
   node = resolveToValue(node, scope, resolve)
 
-  if ( node ){
-    if ( resolveToModule.isModule(node, scope) )
-      name = path.basename(node.source.value, path.extname(node.source.value))
-    else if ( t.isClass(node) )
+  if (node) {
+    if (resolveToModule.isModule(node, scope)){
+      if (t.isImportSpecifier(node) || t.isImportDefaultSpecifier(node))
+        node = node._paths[0].parentPath.parent
+
+      if (node.source)
+        name = path.basename(node.source.value, path.extname(node.source.value))
+    }
+    else if (t.isClass(node))
       name = node.id.name
-    else if ( t.isVariableDeclarator(node) )
+    else if (t.isVariableDeclarator(node))
       name = node.id.name
     else console.log('not module', node)
   }
-  else {
-    name = path.basename(node.source.value, path.extname(node.source.value))
-  }
 
-  return name
+  return name || ''
 }
 
 module.exports = resolveToName

@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, PropTypes } from 'react';
 
 var react = require('react/addons')
 

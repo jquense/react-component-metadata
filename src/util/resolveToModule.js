@@ -3,7 +3,11 @@ let { types: t } = require('babel-core')
 
 let isWindow = node => t.isMemberExpression(node) && (node.object.name === 'window' || node.object.name === 'global')
 
-let isModule = node => t.isImportDeclaration(node) || isWindow(node) || (t.isCallExpression(node) && node.callee.name === 'require')
+let isImport = node => (
+  t.isImportSpecifier(node) || t.isImportDefaultSpecifier(node)
+);
+
+let isModule = node => isImport(node) || isWindow(node) || (t.isCallExpression(node) && node.callee.name === 'require')
 
 let resolve = node => isModule(node) || isWindow(node)
 

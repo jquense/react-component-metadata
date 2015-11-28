@@ -6,7 +6,8 @@ let isResolvable = node => t.isObjectExpression(node) || t.isLiteral(node)
 
 function resolveToValue(node, scope, resolve = isResolvable){
 
-  if ( resolve(node, scope) ){
+
+  if (resolve(node, scope)) {
     //console.log('resolved', node.type, resolve.name)
     return node
   }
@@ -14,7 +15,6 @@ function resolveToValue(node, scope, resolve = isResolvable){
     return resolveToValue(node.right, scope, resolve)
   }
   else if ( t.isVariableDeclarator(node) ) {
-    //console.log('vd')
     return resolveToValue(node.init, scope, resolve)
   }
   else if( t.isMemberExpression(node)) {
@@ -35,7 +35,7 @@ function resolveToValue(node, scope, resolve = isResolvable){
     node = binding.path.container[binding.path.key]
 
     // destructuring
-    if ( t.isObjectPattern(node.id) ){
+    if (t.isObjectPattern(node.id) ) {
       var prop = find(node.id.properties, p => p.value && p.value.name === name)
 
       node = t.memberExpression(node.init, t.identifier(prop.key.name))
@@ -44,9 +44,9 @@ function resolveToValue(node, scope, resolve = isResolvable){
     //console.log('ident')
     return resolveToValue(node, binding.scope, resolve)
   }
-  // else {
-  //   console.log('not resolved')
-  // }
+  else {
+    //console.log('not resolved', node.type, node._paths[0].parentPath)
+  }
 }
 
 

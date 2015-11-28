@@ -3,13 +3,14 @@ let { types: t } = require('babel-core')
 
 let rDoclets = /^@(\w+)(?:$|\s((?:[^](?!^@\w))*))/gmi;
 
-let isBlockComment = node => node.type === 'Block' && (node.value.indexOf('*\n') === 0 || node.value.indexOf('*\r\n') === 0)
+let isBlockComment = node => node.type === 'CommentBlock'
+  && (node.value.indexOf('*\n') === 0 || node.value.indexOf('*\r\n') === 0)
 
 var doc = module.exports = {
 
   findLeadingCommentNode(visitor) {
     var parent = visitor.parentPath.node;
-    
+
     if (parent.leadingComments )
       return parent
 
