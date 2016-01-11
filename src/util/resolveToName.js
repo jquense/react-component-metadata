@@ -9,7 +9,10 @@ let { types: t } = require('babel-core')
 function resolve(node, scope) {
   return resolveToModule.isModule(node, scope)
       || isReactComponentClass(node, scope)
-      || (t.isVariableDeclarator(node) && isReactCreateClass(node.init.callee, scope));
+      || (t.isVariableDeclarator(node)
+      && node.init
+      && node.init.callee
+      && isReactCreateClass(node.init.callee, scope));
 }
 
 
