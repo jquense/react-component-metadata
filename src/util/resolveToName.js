@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from 'babel-types';
 let resolveToValue = require('./resolveToValue')
   , resolveToModule = require('./resolveToModule')
   , isReactCreateClass = require('./isReactCreateClass')
@@ -35,7 +35,7 @@ function resolveToName(node, scope){
       name = node.id.name
     else if (t.isVariableDeclarator(node))
       name = node.id.name
-    else console.log('not module', node)
+    //else console.log('not module', node)
   }
 
   return name || ''

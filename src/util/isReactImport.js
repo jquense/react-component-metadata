@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from 'babel-types';
 
 function isRequire(node){
   return t.isCallExpression(node)

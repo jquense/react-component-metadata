@@ -1,4 +1,5 @@
-import * as t from "babel-types";
+import * as t from 'babel-types';
+import methodData from './component-body-visitor';
 let {
     parsePropTypes
   , parseDefaultProps } = require('./parseProps')
@@ -40,6 +41,7 @@ module.exports = function ClassVisitor(state, opts) {
         json[component] = {
           props: {},
           composes: [],
+          methods: methodData(classBody),
           desc: comment || '',
           ...json[component]
         }

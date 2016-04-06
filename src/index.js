@@ -2,7 +2,7 @@ import * as babylon from 'babylon';
 import traverse from 'babel-traverse';
 import docs from './util/comments'
 
-function metadata(file, opts = {}){
+function metadata(file, opts = {}) {
   var state = {
     file,
     result: {},

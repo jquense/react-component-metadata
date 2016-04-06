@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from 'babel-types';
 let resolveToName = require('./util/resolveToName')
   , doc = require('./util/comments');
 

@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from 'babel-types';
 let find = require('lodash/collection/find')
 
 let rDoclets = /^@(\w+)(?:$|\s((?:[^](?!^@\w))*))/gmi;

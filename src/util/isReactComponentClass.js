@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from 'babel-types';
 let resolveToModule = require('./resolveToModule')
   , isReactImport = require('./isReactImport');
 
@@ -22,7 +22,7 @@ function isClassWithRender(node) {
 }
 
 module.exports = function isReactComponentClass(node, scope, infer = false) {
-  
+
   return extendsReactComponentClass(node, scope)
     || (infer && isClassWithRender(node))
 }

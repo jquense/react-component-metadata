@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from 'babel-types';
 
 let find = require('lodash/collection/find');
 
@@ -27,7 +27,6 @@ function resolveToValue(node, scope, resolve = isResolvable){
   else if ( t.isIdentifier(node) ){
     var name = node.name
       , binding = scope.getBinding(name)
-
 
     if (!binding) {
       return node

@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from 'babel-types';
 let resolveToValue = require('./resolveToValue')
 
 let isWindow = node => t.isMemberExpression(node) && (node.object.name === 'window' || node.object.name === 'global')
@@ -12,7 +12,7 @@ let isModule = node => isImport(node) || isWindow(node) || (t.isCallExpression(n
 let resolve = (node) => {
   return isModule(node) || isWindow(node)
 }
-  
+
 
 function resolveToModule(node, scope){
   return resolveToValue(node, scope, resolve)

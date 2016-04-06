@@ -105,6 +105,7 @@ describe('parsing Components', () => {
       ClassicComponent: {
         desc: 'Description of my Component',
         props: propMetaData,
+        methods: {},
         composes: []
       }
     })
@@ -115,6 +116,7 @@ describe('parsing Components', () => {
       AssignedComponent: {
         desc: 'Description of my Component',
         props: propMetaData,
+        methods: {},
         composes: []
       }
     })
@@ -125,6 +127,7 @@ describe('parsing Components', () => {
       StaticComponent: {
         desc: 'Description of my Component',
         props: propMetaData,
+        methods: {},
         composes: []
       }
     })
@@ -135,6 +138,7 @@ describe('parsing Components', () => {
       InferedComponent: {
         desc: '',
         composes: [],
+        methods: {},
         props: {
           objProp: propMetaData.objProp
         }
@@ -147,6 +151,7 @@ describe('parsing Components', () => {
       MyMixin: {
         desc: 'Description of my Component',
         props: propMetaData,
+        methods: {},
         mixin: true,
         composes: []
       }
@@ -163,6 +168,7 @@ describe('parsing Components', () => {
       MyMixout: {
         desc: 'Description of my Component',
         props: propMetaData,
+        methods: {},
         mixin: true,
         composes: []
       }
@@ -183,11 +189,13 @@ describe('parsing Components', () => {
     parseFixture('resolve').should.eql({
       ClassicComponent: {
         desc: '', props,
+        methods: {},
         composes: []
       },
 
       ES6Component: {
         desc: '', props,
+        methods: {},
         composes: []
       }
     })
@@ -197,16 +205,19 @@ describe('parsing Components', () => {
     parseFixture('resolve-module').should.eql({
       ClassicComponent: {
         desc: '', props: {},
+        methods: {},
         composes: []
       },
 
       ES6Component: {
         desc: '', props: {},
+        methods: {},
         composes: []
       },
 
       GlobalComponent: {
         desc: '', props: {},
+        methods: {},
         composes: []
       }
     })
@@ -216,16 +227,19 @@ describe('parsing Components', () => {
     parseFixture('resolve-mod-or-component').should.eql({
       ClassicComponent: {
         desc: '', props: {},
+        methods: {},
         composes: []
       },
 
       ES6Component: {
         desc: '', props: {},
+        methods: {},
         composes: []
       },
 
       GlobalComponent: {
         desc: '', props: {},
+        methods: {},
         composes: ['ES6Component', 'ClassicComponent']
       }
     })
@@ -245,17 +259,20 @@ describe('parsing Components', () => {
     parseFixture('composes', { mixins: true }).should.eql({
       ClassicComponent: {
         desc: '', props: props,
+        methods: {},
         composes: ['Other'],
         mixins: ['MyMixin']
       },
 
       ES6Component: {
         desc: '', props: props,
+        methods: {},
         composes: ['Other']
       },
 
       ES7Component: {
         desc: '', props: props,
+        methods: {},
         composes: ['Other', 'ES6Component']
       }
     })
@@ -267,6 +284,7 @@ describe('parsing Components', () => {
       Component: {
         desc: '',
         composes: ['Component'],
+        methods: {},
         props: {
           prop: {
             computed: false,
@@ -281,4 +299,24 @@ describe('parsing Components', () => {
     })
   })
 
+  // it('should parse method data', () => {
+  //   parseFixture('methods').should.eql({
+  //     // ES6Component: {
+  //     //   desc: '',
+  //     //   props: {},
+  //     //   composes: [],
+  //     //   methods: {
+  //     //     foo: {
+  //     //       desc: 'this is foo()'
+  //     //     }
+  //     //   }
+  //     // }
+  //     ClassicComponent: {
+  //       desc: '',
+  //       props: {},
+  //       composes: [],
+  //       methods: { "bar": { } }
+  //     }
+  //   })
+  // })
 })
