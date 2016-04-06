@@ -1,6 +1,6 @@
+import * as t from "babel-types";
 
-let { types: t } = require('babel-core')
-  , find = require('lodash/collection/find');
+let find = require('lodash/collection/find');
 
 let isResolvable = node => t.isObjectExpression(node) || t.isLiteral(node)
 
@@ -8,7 +8,7 @@ function resolveToValue(node, scope, resolve = isResolvable){
 
 
   if (resolve(node, scope)) {
-    //console.log('resolved', node.type, resolve.name)
+    //console.log('resolved', node, scope)
     return node
   }
   else if( t.isAssignmentExpression(node)){
@@ -21,19 +21,23 @@ function resolveToValue(node, scope, resolve = isResolvable){
     while (node && t.isMemberExpression(node)) {
       node = node.object;
     }
+
     return resolveToValue(node, scope, resolve)
   }
   else if ( t.isIdentifier(node) ){
     var name = node.name
       , binding = scope.getBinding(name)
 
-    if ( !binding ){
-      //console.log('ident', node)
+
+    if (!binding) {
       return node
     }
 
     node = binding.path.container[binding.path.key]
 
+    if (t.isVariableDeclaration(node)) {
+      node = find(node.declarations, d => d.id.name === name)
+    }
     // destructuring
     if (t.isObjectPattern(node.id) ) {
       var prop = find(node.id.properties, p => p.value && p.value.name === name)

@@ -3,6 +3,6 @@ let resolveToModule = require('./resolveToModule')
 
 let isReactClass = (node, scope) => node.property
       && node.property.name === 'createClass'
-      && isReactImport(resolveToModule(node.object, scope))
+      && isReactImport(resolveToModule(node.object, scope), scope)
 
 module.exports = isReactClass

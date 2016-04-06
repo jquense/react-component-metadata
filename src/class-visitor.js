@@ -1,5 +1,5 @@
-let { types: t } = require('babel-core')
-  , {
+import * as t from "babel-types";
+let {
     parsePropTypes
   , parseDefaultProps } = require('./parseProps')
   , resolveToValue = require('./util/resolveToValue')
@@ -20,15 +20,15 @@ function getClassInitializerDefaults(classBody, scope){
 }
 
 
-module.exports = function ClassVisitor(state, opts){
+module.exports = function ClassVisitor(state, opts) {
   var json = state.result
     , components = state.seen
 
   return {
-    enter(node, parent, scope) {
+    enter({ node, scope }) {
       var isKnownComponent = isReactComponentClass(node, scope, opts.inferComponent)
 
-      if (isKnownComponent){
+      if (isKnownComponent) {
         var component = node.id ? node.id.name : uuid('AnonymousComponent')
           , classBody = node.body.body
           , comment   = doc.parseCommentBlock(node)
@@ -40,14 +40,13 @@ module.exports = function ClassVisitor(state, opts){
         json[component] = {
           props: {},
           composes: [],
-          desc: comment || ''
+          desc: comment || '',
+          ...json[component]
         }
 
         parsePropTypes(propTypes, json[component], scope)
         parseDefaultProps(defaultProps, json[component], state.file, scope)
       }
-
-      return node
     }
   }
 }

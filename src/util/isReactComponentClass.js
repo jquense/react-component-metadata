@@ -1,26 +1,28 @@
-let { types: t } = require('babel-core')
-  , resolveToModule = require('./resolveToModule')
+import * as t from "babel-types";
+let resolveToModule = require('./resolveToModule')
   , isReactImport = require('./isReactImport');
 
-function hasRender(classBody, scope){
+function hasRender(classBody) {
   return classBody.body.some(
-    node => t.isMethodDefinition(node) && node.key.name === 'render');
-};
+    node => t.isClassMethod(node) && node.key.name === 'render');
+}
 
-function extendsReactComponentClass(node, scope){
+function extendsReactComponentClass(node, scope) {
+
   return (t.isClassDeclaration(node) || t.isClassExpression(node))
     && node.superClass
     && t.isMemberExpression(node.superClass)
     && node.superClass.property.name === 'Component'
-    && isReactImport(resolveToModule(node.superClass, scope))
+    && isReactImport(resolveToModule(node.superClass, scope), scope)
 }
 
-function isClassWithRender(node, scope){
+function isClassWithRender(node) {
   return (t.isClassDeclaration(node) || t.isClassExpression(node))
     && hasRender(node.body)
 }
 
-module.exports = function isReactComponentClass(node, scope, infer = false){
+module.exports = function isReactComponentClass(node, scope, infer = false) {
+  
   return extendsReactComponentClass(node, scope)
     || (infer && isClassWithRender(node))
 }

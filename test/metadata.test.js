@@ -1,5 +1,6 @@
+import * as t from "babel-types";
 var parseFixture = require('./helpers')
-var { types: t } = require('babel-core')
+
 
 describe('parsing Components', () => {
 
@@ -261,15 +262,6 @@ describe('parsing Components', () => {
   })
 
   it('should handle defaultProp spread', () => {
-    var props = {
-          prop: {
-            desc: '',
-            required: false,
-            type: {
-              name: 'string'
-            }
-          }
-        }
 
     parseFixture('defaultPropSpread', { mixins: true }).should.eql({
       Component: {

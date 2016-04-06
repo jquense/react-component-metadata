@@ -1,5 +1,5 @@
-let { types: t } = require('babel-core')
-  , find = require('lodash/collection/find')
+import * as t from "babel-types";
+let find = require('lodash/collection/find')
 
 let rDoclets = /^@(\w+)(?:$|\s((?:[^](?!^@\w))*))/gmi;
 
@@ -11,7 +11,7 @@ var doc = module.exports = {
   findLeadingCommentNode(visitor) {
     var parent = visitor.parentPath.node;
 
-    if (parent.leadingComments )
+    if (parent.leadingComments || parent.trailingComments)
       return parent
 
     return visitor.parentPath.parentPath.node
@@ -19,6 +19,7 @@ var doc = module.exports = {
 
   parseCommentBlock(node) {
     var comment = find(node && node.leadingComments, isBlockComment)
+
     return comment && doc.cleanComment(comment.value)
   },
 

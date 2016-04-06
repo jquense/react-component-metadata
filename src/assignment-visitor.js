@@ -4,7 +4,7 @@ let {
   , resolveToValue = require('./util/resolveToValue')
 
 
-module.exports = function(state, opts){
+module.exports = function(state) {
   var json = state.result
     , components = state.seen
 
@@ -13,10 +13,10 @@ module.exports = function(state, opts){
   let seenClass = (name, scope) => components.indexOf(name) !== -1 && scope.hasBinding(name)
 
   return {
-    enter(node, parent, scope) {
+    enter({ node, scope }) {
       var component = node.left.object && node.left.object.name;
 
-      if ( isAssigning(node, 'propTypes') && seenClass(component, scope))
+      if (isAssigning(node, 'propTypes') && seenClass(component, scope))
         parsePropTypes(resolveToValue(node.right, scope), json[component], scope)
 
       else if ( isAssigning(node, 'defaultProps') && seenClass(component, scope) ){

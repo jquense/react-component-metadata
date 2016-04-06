@@ -1,4 +1,4 @@
-let { types: t } = require('babel-core')
+import * as t from "babel-types";
 
 function isRequire(node){
   return t.isCallExpression(node)
@@ -14,13 +14,13 @@ let isCorrectImport = node => (
 
 );
 
-function isImport(node){
-  //console.log((t.isImportSpecifier(node) || t.isImportDefaultSpecifier(node)) && node._paths[0].parentPath)
+function isImport(node, scope){
+  if (t.isImportSpecifier(node) || t.isImportDefaultSpecifier(node)) {
+    let binding = scope.getBinding(node.local.name)
+    node = binding.path.parent
+  }
+
   return isCorrectImport(node)
-    || (
-      (t.isImportSpecifier(node) || t.isImportDefaultSpecifier(node))
-      && isCorrectImport(node._paths[0].parentPath.parent)
-    )
 }
 
 function isGlobal(node) {
@@ -29,8 +29,8 @@ function isGlobal(node) {
       && node.property.name === 'React'
 }
 
-module.exports = function (node){
-  return isRequire(node)
-      || isImport(node)
-      || isGlobal(node)
+module.exports = function (node, scope){
+  return isRequire(node, scope)
+      || isImport(node, scope)
+      || isGlobal(node, scope)
 }

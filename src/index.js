@@ -1,6 +1,6 @@
-var babel = require('babel-core')
-  , docs = require('./util/comments')
-
+import * as babylon from 'babylon';
+import traverse from 'babel-traverse';
+import docs from './util/comments'
 
 function metadata(file, opts = {}){
   var state = {
@@ -9,24 +9,40 @@ function metadata(file, opts = {}){
     seen: []
   }
 
-  function plugin(host) {
-    var visitor = {
+  var visitor = {
 
-      AssignmentExpression: require('./assignment-visitor')(state, opts),
+    AssignmentExpression: require('./assignment-visitor')(state, opts),
 
-      Class: require('./class-visitor')(state, opts),
+    Class: require('./class-visitor')(state, opts),
 
-      CallExpression: require('./createClass-visitor')(state, opts)
-    }
-
-    if (opts.mixins) {
-      visitor.VariableDeclarator = require('./mixin-visitor')(state, opts)
-    }
-
-    return new host.Plugin('process-react-classes', { visitor })
+    CallExpression: require('./createClass-visitor')(state, opts)
   }
 
-  babel.transform(file, { code: false, stage: 0, plugins: [ plugin ] })
+  if (opts.mixins) {
+    visitor.VariableDeclarator = require('./mixin-visitor')(state, opts)
+  }
+
+  let ast = babylon.parse(file, {
+    sourceType: 'module',
+    plugins: [
+      'asyncFunctions',
+      'jsx',
+      'flow',
+      'classConstructorCall',
+      'doExpressions',
+      'trailingFunctionCommas',
+      'objectRestSpread',
+      'decorators',
+      'classProperties',
+      'exportExtensions',
+      'exponentiationOperator',
+      'asyncGenerators',
+      'functionBind',
+      'functionSent'
+    ]
+  })
+
+  traverse(ast, visitor)
 
   return state.result
 }

@@ -4,6 +4,6 @@ var metadata = require('../src')
 
 module.exports = function(fixture, options = {}){
   return metadata(
-      fs.readFileSync(require.resolve('./fixtures/' + fixture))
+      fs.readFileSync(require.resolve('./fixtures/' + fixture), 'utf8')
     , options)
 }

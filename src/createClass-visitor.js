@@ -1,5 +1,5 @@
-let { types: t } = require('babel-core')
-  , {
+import * as t from 'babel-types';
+let {
     parsePropTypes
   , parseDefaultProps } = require('./parseProps')
   , resolveToValue = require('./util/resolveToValue')
@@ -7,8 +7,7 @@ let { types: t } = require('babel-core')
   , isReactClass = require('./util/isReactCreateClass')
   , find = require('lodash/collection/find')
   , uuid = require('lodash/utility/uniqueId')
-  , doc = require('./util/comments')
-  , path = require('path');
+  , doc = require('./util/comments');
 
 let isResolvable = resolveToValue.isResolvable
 
@@ -38,14 +37,18 @@ module.exports = function(state, opts){
     , components = state.seen
 
   return {
-    enter(node, parent, scope) {
+    enter(path) {
+      let { node, scope } = path;
 
       if (isReactClass(node.callee, scope)) {
         var spec = resolveToValue(node.arguments[0], scope).properties
-          , comment = doc.parseCommentBlock(doc.findLeadingCommentNode(this))
-          , component = getCreatClassName(spec, this, scope, comment)
+          , comment = doc.parseCommentBlock(doc.findLeadingCommentNode(path))
+          , component = getCreatClassName(spec, path, scope, comment)
           , propTypes = find(spec, node => t.isProperty(node) && node.key.name === 'propTypes')
-          , getDefaultProps = find(spec, node => t.isProperty(node) && node.key.name === 'getDefaultProps')
+          , getDefaultProps = find(spec, node =>
+              (t.isProperty(node) || t.isObjectMethod(node)) &&
+              node.key.name === 'getDefaultProps'
+            )
 
         components.push(component)
 
@@ -55,7 +58,7 @@ module.exports = function(state, opts){
           desc: comment || ''
         }
 
-        if ( opts.mixins ){
+        if (opts.mixins) {
           var mixins = find(spec, node => t.isProperty(node) && node.key.name === 'mixins');
 
           if ( mixins ){
@@ -66,12 +69,13 @@ module.exports = function(state, opts){
 
         propTypes && parsePropTypes(resolveToValue(propTypes.value, scope), json[component], scope)
 
-        if ( getDefaultProps ){
+        if (getDefaultProps) {
+          let body = (t.isProperty(getDefaultProps) ? getDefaultProps.value.body :getDefaultProps.body).body;
 
-          let defaultProps = find(getDefaultProps.value.body.body,
-            node => t.isReturnStatement(node) && (isResolvable(node.argument) || t.isIdentifier(node.argument)) )
+          let defaultProps = find(body,
+            node => t.isReturnStatement(node) && (isResolvable(node.argument) || t.isIdentifier(node.argument)))
 
-          if ( defaultProps )
+          if (defaultProps)
             parseDefaultProps(resolveToValue(defaultProps.argument, scope), json[component], state.file, scope)
         }
       }

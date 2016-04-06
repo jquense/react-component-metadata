@@ -1,5 +1,5 @@
 
-require('babel-core/register')({ stage: 0 })
+require('babel-register')
 
 var chai = require('chai')
 

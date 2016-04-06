@@ -6,13 +6,11 @@ var ClassicComponent = React.createClass({
   }
 })
 
-
 class ES6Component extends React.Component {
   render() {
     return <span/>;
   }
 }
-
 
 class GlobalComponent extends React.Component {
   static propTypes = {
