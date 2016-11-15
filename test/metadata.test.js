@@ -44,7 +44,10 @@ describe('parsing Components', () => {
           defaultValue: 'true'
         },
         enumProp: {
-          type: { name: 'enum', value: ['true', '\'john\'', '5'] },
+          type: {
+            name: 'enum',
+            value: ['true', '\'john\'', '5', 'null', 'Infinity'],
+          },
           required: false,
           desc: ''
         },

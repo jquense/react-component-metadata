@@ -29,7 +29,7 @@ var props = {
 
     'aria-property': React.PropTypes.string,
 
-    enumProp:   React.PropTypes.oneOf([true, 'john', 5]),
+    enumProp:   React.PropTypes.oneOf([true, 'john', 5, null, Infinity]),
 
     otherProp:  React.PropTypes.instanceOf(Message),
 
