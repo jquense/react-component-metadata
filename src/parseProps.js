@@ -74,9 +74,16 @@ function getTypeFromPropType(pt){
         , argument = args[0];
 
       if (t.isArrayExpression(argument))
-        type.value = argument.elements.map(el =>
-          el.extra ? el.extra.raw : ('' + el.value)
-        )
+        type.value = argument.elements.map((el) => {
+          switch (el.type) {
+            case 'NullLiteral':
+              return 'null';
+            case 'Identifier':
+              return el.name;
+            default:
+              return el.extra ? el.extra.raw : String(el.value);
+          }
+        });
 
       else if ( t.isMemberExpression(argument) )
         type.value = argument.property.value
